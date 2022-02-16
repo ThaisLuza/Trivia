@@ -4,17 +4,9 @@ import { connect } from 'react-redux';
 import md5 from 'crypto-js/md5';
 
 class Header extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      score: 0,
-    };
-  }
-
   render() {
-    const { score } = this.state;
-    const { name, email } = this.props;
+    const { name, email, score } = this.props;
+    console.log(score);
     const hashImage = md5(email).toString();
     return (
       <div>
@@ -41,11 +33,13 @@ class Header extends Component {
 Header.propTypes = {
   name: PropTypes.string,
   email: PropTypes.string,
+  score: PropTypes.number,
 }.isRequired;
 
 const mapStateToProps = (state) => ({
   name: state.login.name,
   email: state.login.email,
+  score: state.login.score,
 });
 
 export default connect(mapStateToProps)(Header);
