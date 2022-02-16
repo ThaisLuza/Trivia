@@ -1,20 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { createUser, createToken, triviaFetch } from '../redux/actions/index';
+import { Redirect } from 'react-router-dom';
+import { playerLoginInputs, updateToken } from '../redux/actions';
+import { tokenFetch } from '../services/fetchs';
 
 class Login extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      email: '',
       name: '',
+      email: '',
       buttonIsDisabled: true,
       redirect: false,
-      token: '',
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange = ({ target }) => {
@@ -25,34 +27,31 @@ class Login extends React.Component {
   loginValidation = () => {
     const MIN_LENGTH = 1;
     const { email, name } = this.state;
-
     const emailCheck = email.toLowerCase().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-    // Checking e-mail
-    // SOURCE: https://stackoverflow.com/questions/46155/whats-the-best-way-to-validate-an-email-address-in-javascript
+    // E-mail Validation Source: https://stackoverflow.com/questions/46155/whats-the-best-way-to-validate-an-email-address-in-javascript
     const nameCheck = name.length >= MIN_LENGTH;
     this.setState({ buttonIsDisabled: !(emailCheck && nameCheck) });
   }
 
-  handleClick = (name, email, token) => {
-    const { dispatchLoginInfo, fetchQuestions, dispatchToken } = this.props;
-    dispatchLoginInfo(name, email);
-    fetchQuestions();
-    dispatchToken(token);
-    this.setState({
-      redirect: true,
-    });
+  async handleClick() {
+    const { playerInfo } = this.props;
+    const { name, email } = this.state;
+    const { playerToken } = this.props;
+    playerInfo({ name, email });
+    playerToken(await tokenFetch());
+    this.setState({ redirect: true });
   }
 
   render() {
-    const { name, email, buttonIsDisabled, redirect, token } = this.state;
+    const { name, email, buttonIsDisabled, redirect } = this.state;
     const { history } = this.props;
-    if (redirect) {
-      return (<Redirect to="/game" />);
-    }
+    if (redirect) return <Redirect to="/game" />;
     return (
       <div>
-        <form>
-          <label htmlFor="input-player-name">
+        <form
+          onSubmit={ (event) => event.preventDefault() }
+        >
+          <label htmlFor="name-input">
             Nome:
             <input
               type="text"
@@ -64,7 +63,7 @@ class Login extends React.Component {
             />
           </label>
 
-          <label htmlFor="input-gravatar-email">
+          <label htmlFor="email-input">
             E-mail:
             <input
               type="text"
@@ -77,17 +76,17 @@ class Login extends React.Component {
           </label>
 
           <button
-            type="button"
-            disabled={ buttonIsDisabled }
-            onClick={ () => this.handleClick(name, email, token) }
+            type="submit"
             data-testid="btn-play"
+            disabled={ buttonIsDisabled }
+            onClick={ this.handleClick }
           >
             Play
           </button>
         </form>
         <button
-          data-testid="btn-settings"
           type="button"
+          data-testid="btn-settings"
           onClick={ () => {
             history.push('/options');
           } }
@@ -99,19 +98,17 @@ class Login extends React.Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  dispatchLoginInfo: (name, email) => dispatch(createUser(name, email)),
-  fetchQuestions: () => dispatch(triviaFetch()),
-  dispatchToken: (token) => dispatch(createToken(token)),
-});
-
 Login.propTypes = {
-  dispatchLoginInfo: PropTypes.func.isRequired,
-  fetchQuestions: PropTypes.func.isRequired,
-  dispatchToken: PropTypes.func.isRequired,
+  playerInfo: PropTypes.func.isRequired,
+  playerToken: PropTypes.func.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
   }).isRequired,
 };
+
+const mapDispatchToProps = (dispatch) => ({
+  playerInfo: (info) => dispatch(playerLoginInputs(info)),
+  playerToken: (token) => dispatch(updateToken(token)),
+});
 
 export default connect(null, mapDispatchToProps)(Login);
