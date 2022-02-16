@@ -25,10 +25,12 @@ class Header extends Component {
         />
         <p data-testid="header-player-name">
           Nome:
+          {' '}
           {name}
         </p>
         <p data-testid="header-score">
           Placar:
+          {' '}
           {score}
         </p>
       </div>
