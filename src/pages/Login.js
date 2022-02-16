@@ -28,8 +28,7 @@ class Login extends React.Component {
     const MIN_LENGTH = 1;
     const { email, name } = this.state;
     const emailCheck = email.toLowerCase().match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-    // Checking e-mail
-    // SOURCE: https://stackoverflow.com/questions/46155/whats-the-best-way-to-validate-an-email-address-in-javascript
+    // E-mail Validation Source: https://stackoverflow.com/questions/46155/whats-the-best-way-to-validate-an-email-address-in-javascript
     const nameCheck = name.length >= MIN_LENGTH;
     this.setState({ buttonIsDisabled: !(emailCheck && nameCheck) });
   }
