@@ -1,21 +1,23 @@
-import { USER } from '../actions/index';
+import { PLAYER_LOGIN } from '../actions';
 
-const INITIAL_STATE_FIELDS = {
+const INITIAL_STATE = {
   name: '',
+  assertions: '',
+  score: '',
   email: '',
 };
 
-const reducerLogin = (state = INITIAL_STATE_FIELDS, action) => {
+const login = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-  case USER:
+  case PLAYER_LOGIN:
     return {
       ...state,
-      name: action.name,
-      email: action.email,
+      name: action.payload.name,
+      email: action.payload.email,
     };
   default:
     return state;
   }
 };
 
-export default reducerLogin;
+export default login;
