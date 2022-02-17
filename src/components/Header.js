@@ -6,7 +6,7 @@ import md5 from 'crypto-js/md5';
 class Header extends Component {
   render() {
     const { name, email, score } = this.props;
-    console.log(score);
+    console.log(typeof score);
     const hashImage = md5(email).toString();
     return (
       <div>
@@ -20,9 +20,11 @@ class Header extends Component {
           {' '}
           {name}
         </p>
-        <p data-testid="header-score">
+        <p>
           Placar:
           {' '}
+        </p>
+        <p data-testid="header-score">
           {score}
         </p>
       </div>

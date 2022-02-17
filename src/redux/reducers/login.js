@@ -18,7 +18,7 @@ const login = (state = INITIAL_STATE, action) => {
   case SCORE:
     return {
       ...state,
-      score: action.payload,
+      score: action.payload + state.score,
     };
   default:
     return state;
