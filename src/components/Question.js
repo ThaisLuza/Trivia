@@ -123,7 +123,7 @@ Question.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  name: state.login.name,
+  name: state.player.name,
 });
 
 const mapDispatchToProps = (dispatch) => ({
