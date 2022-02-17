@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import randomOrder from '../helpers/randomOrder';
 import gamePoints from '../services/gamePoints';
-import { updateScore } from '../redux/actions';
+import { updateScore, nextQuestion } from '../redux/actions';
 
 const MAX_TIME = 1000; // equivalente a 1 segundo
 
@@ -63,7 +63,7 @@ class Question extends Component {
       isStyled: true,
     });
     const { correctAnswer, timer, difficulty } = this.state;
-    const { name, dispatchScore } = this.props;
+    const { name, dispatchScore, clickDispatch } = this.props;
     console.log(name);
     if (correctAnswer === answer) {
       const ranking = {
@@ -74,6 +74,7 @@ class Question extends Component {
       console.log(ranking.score);
       localStorage.setItem('ranking', JSON.stringify(ranking));
     }
+    clickDispatch(true);
   }
 
   render() {
@@ -112,6 +113,7 @@ class Question extends Component {
 Question.propTypes = {
   dispatchScore: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  clickDispatch: PropTypes.func.isRequired,
   question: PropTypes.shape({
     incorrect_answers: PropTypes.arrayOf(PropTypes.any).isRequired,
     correct_answer: PropTypes.string.isRequired,
@@ -128,6 +130,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchScore: (payload) => dispatch(updateScore(payload)),
+  clickDispatch: (bool) => dispatch(nextQuestion(bool)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Question);

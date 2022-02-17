@@ -1,0 +1,7 @@
+.isVisible {
+  background-color: rgb(156, 231, 219);
+}
+
+.invisible {
+  display: none;
+}
