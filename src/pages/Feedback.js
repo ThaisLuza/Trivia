@@ -6,7 +6,8 @@ import Header from '../components/Header';
 const COUNT = 3;
 class Feedback extends React.Component {
   render() {
-    const { assertions } = this.props;
+    const { assertions, score } = this.props;
+    console.log(score);
     return (
       <>
         <Header />
@@ -15,7 +16,10 @@ class Feedback extends React.Component {
         ) : (
           <span data-testid="feedback-text">Well Done!</span>
         ) }
-        <h1 data-testid="feedback-text"> Teste da Página de Feedback</h1>
+        <span>Placar final:</span>
+        <h3 data-testid="feedback-total-score">{score}</h3>
+        <span>Acertos:</span>
+        <h4 data-testid="feedback-total-question">{assertions}</h4>
       </>
     );
   }
@@ -23,10 +27,12 @@ class Feedback extends React.Component {
 
 Feedback.propTypes = {
   assertions: PropTypes.number,
+  score: PropTypes.number,
 }.isRequired;
 
 const mapStateToProps = (state) => ({
   assertions: state.player.assertions,
+  score: state.player.score,
 });
 
 export default connect(mapStateToProps)(Feedback);
