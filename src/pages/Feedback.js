@@ -6,7 +6,7 @@ import Header from '../components/Header';
 const COUNT = 3;
 class Feedback extends React.Component {
   render() {
-    const { assertions, score } = this.props;
+    const { assertions, score, history } = this.props;
     console.log(score);
     return (
       <>
@@ -20,6 +20,13 @@ class Feedback extends React.Component {
         <h3 data-testid="feedback-total-score">{score}</h3>
         <span>Acertos:</span>
         <h4 data-testid="feedback-total-question">{assertions}</h4>
+        <button
+          type="button"
+          data-testid="btn-play-again"
+          onClick={ () => history.push('/') }
+        >
+          Play Again
+        </button>
       </>
     );
   }
